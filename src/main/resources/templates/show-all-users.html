@@ -45,7 +45,7 @@
             border-radius: 12px;
         }
 
-        #logout {
+        .inputAdd {
             background-color: #f2f2f2;
             border: 1px solid black;
             color: black;
@@ -59,7 +59,7 @@
     </style>
 </head>
 <body>
-<h1>User Info </h1>
+<h1>List of users</h1>
 <br/><br/>
 <div>
     <table>
@@ -67,19 +67,29 @@
         <tr>
             <th>Username</th>
             <th>Salary</th>
+            <th>Operations</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:object="${user}">
+        <tr th:each="user : ${users}">
             <td th:utext="${user.username}">...</td>
             <td th:utext="${user.salary}">...</td>
+            <td>
+                <a th:href="@{'admin/edit/?userId='+ ${user.id}}">
+                    <input type="button" value="Update" class="operationButton">
+                </a>
+                <form th:action="@{'admin/?userId=' + ${user.id}}" th:method="DELETE">
+                    <input type="submit" value="Delete" class="operationButton">
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
 </div>
 <br><br>
+<input th:type="button" th:value="ADD" onclick="window.location.href = 'admin/new'" class="inputAdd"/>
 <form th:action="@{'/logout'}">
-    <input type="submit" value="Logout" id="logout">
+    <input type="submit" value="Logout" class="inputAdd">
 </form>
 
 </body>
