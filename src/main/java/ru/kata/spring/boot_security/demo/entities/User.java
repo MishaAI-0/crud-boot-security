@@ -23,29 +23,32 @@ import java.util.stream.Collectors;
 public class User implements org.springframework.security.core.userdetails.UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column(name = "username")
+    private Long id;
+    @Column(name = "name")
     private String username;
+
+    @Column(name = "surname")
+    private String surname;
+
+    @Column(name = "age")
+    private int age;
+
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "password")
     private String password;
 
-    @Column(name = "salary")
-    private int salary;
 
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "user_has_role",
+            name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
 
-
-    public User(String username, int salary) {
-        this.username = username;
-        this.salary = salary;
-    }
 
     public User() {
     }
@@ -75,17 +78,34 @@ public class User implements org.springframework.security.core.userdetails.UserD
         return true;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
 
-    public int getSalary() {
-        return salary;
-    }
-
-    public void setSalary(int salary) {
-        this.salary = salary;
-    }
 
     public Set<Role> getRoles() {
         return roles;
@@ -99,21 +119,23 @@ public class User implements org.springframework.security.core.userdetails.UserD
         return password;
     }
 
-    public void setPassword(String passwprd) {
-        this.password = passwprd;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     public String getUsername() {
         return username;
     }
+
+
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toSet());
