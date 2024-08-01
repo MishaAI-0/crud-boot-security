@@ -19,8 +19,10 @@ import ru.kata.spring.boot_security.demo.services.UserService;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -45,7 +47,6 @@ public class AdminController {
         List<Role> allRoles = roleService.getAllRoles();
         model.addAttribute("newUser", new User());
         model.addAttribute("allUsers", allUsers);
-        model.addAttribute("login", login);
         model.addAttribute("currentUser",currentUser);
         model.addAttribute("allRoles", allRoles);
         return "admin";
@@ -53,7 +54,10 @@ public class AdminController {
 
     @PostMapping("/new")
     public String createNewUser(@ModelAttribute("newUser") User user,@RequestParam("selectedRole") String role) {
+
         List<Role> resultRoles = new ArrayList<>();
+
+        role = "ROLE_" + role;
         resultRoles.add(roleService.findRoleByName(role));
         if(role.equals("ROLE_ADMIN")) {
             resultRoles.add(roleService.findRoleByName("ROLE_USER"));
@@ -74,6 +78,7 @@ public class AdminController {
                              @RequestParam("email") String email,
                              @RequestParam("password") String password) {
         List<Role> resultRoles = new ArrayList<>();
+        role = "ROLE_" + role;
         resultRoles.add(roleService.findRoleByName(role));
         if(role.equals("ROLE_ADMIN")) {
             resultRoles.add(roleService.findRoleByName("ROLE_USER"));
