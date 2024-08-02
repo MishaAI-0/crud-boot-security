@@ -1,79 +1,92 @@
 package ru.kata.spring.boot_security.demo.services;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.dto.UserDTO;
+import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
+import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    private final RoleService roleService;
+
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     public User getUserByName(String username) {
-        return userRepository.findByUsername(username).get();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
-
 
     @Override
     public List<User> getUsersList() {
         return userRepository.findAll();
     }
 
-
     @Override
-    public void saveUser(User user) {
+    public User saveUser(User user) {
         if (user.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
 
     @Override
     @Transactional
     public void deleteUserById(Long id) {
-        userRepository.deleteById(id);
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        userRepository.delete(user);
     }
 
     @Override
     public User getUserById(Long id) {
-        return userRepository.getById(id).get();
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
-    @Override
-    public void updateUser(User updatedUser) {
-        Optional<User> existingUserOptional = userRepository.getById(updatedUser.getId());
-
-
-        if (existingUserOptional.isPresent()) {
-            User existingUser = existingUserOptional.get();
-            existingUser.setUsername(updatedUser.getUsername());
-            existingUser.setSurname(updatedUser.getSurname());
-            existingUser.setAge(updatedUser.getAge());
-            existingUser.setEmail(updatedUser.getEmail());
-            existingUser.setPassword(updatedUser.getPassword());
-            existingUser.setRoles(updatedUser.getRoles());
-
-            userRepository.save(existingUser);
-        } else {
-
-            throw new IllegalArgumentException("User not found with id: " + updatedUser.getId());
+    public User updateUser(Long id, UserDTO userDTO) {
+        User existingUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
+        if (!userDTO.getUsername().isEmpty()) {
+            existingUser.setUsername(userDTO.getUsername());
         }
+        if (!userDTO.getSurname().isEmpty()) {
+            existingUser.setSurname(userDTO.getSurname());
+        }
+        if (!userDTO.getPassword().isEmpty()) {
+            existingUser.setPassword(userDTO.getPassword());
+        }
+        if (userDTO.getAge() != null) {
+            existingUser.setAge(userDTO.getAge());
+        }
+        if (!userDTO.getEmail().isEmpty()) {
+            existingUser.setEmail(userDTO.getEmail());
+        }
+        if (!userDTO.getRoles().isEmpty()) {
+            Set<Role> roles = userDTO.getRoles().stream()
+                    .map(roleDTO -> roleService.findRoleByName(roleDTO.getName()))
+                    .collect(Collectors.toSet());
+            existingUser.setRoles(roles);
+        }
+        return saveUser(existingUser);
     }
 
 

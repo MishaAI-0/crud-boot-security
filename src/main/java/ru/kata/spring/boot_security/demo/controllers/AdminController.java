@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -24,17 +25,12 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
+@RequiredArgsConstructor
 public class AdminController {
 
     private final UserService userService;
 
     private final RoleService roleService;
-
-    @Autowired
-    public AdminController(UserService userService, RoleService roleService) {
-        this.userService = userService;
-        this.roleService = roleService;
-    }
 
 
     @GetMapping()
@@ -51,17 +47,17 @@ public class AdminController {
         return "admin";
     }
 
-    @PostMapping("/new")
-    public String createNewUser(@ModelAttribute("newUser") User user,@RequestParam("selectedRole") String role) {
-        List<Role> resultRoles = new ArrayList<>();
-        resultRoles.add(roleService.findRoleByName(role));
-        if(role.equals("ROLE_ADMIN")) {
-            resultRoles.add(roleService.findRoleByName("ROLE_USER"));
-        }
-        user.setRoles(new HashSet<>(resultRoles));
-        userService.saveUser(user);
-        return "redirect:/admin";
-    }
+//    @PostMapping("/new")
+//    public String createNewUser(@ModelAttribute("newUser") User user,@RequestParam("selectedRole") String role) {
+//        List<Role> resultRoles = new ArrayList<>();
+//        resultRoles.add(roleService.findRoleByName(role));
+//        if(role.equals("ROLE_ADMIN")) {
+//            resultRoles.add(roleService.findRoleByName("ROLE_USER"));
+//        }
+//        user.setRoles(new HashSet<>(resultRoles));
+//        userService.saveUser(user);
+//        return "redirect:/admin";
+//    }
 
 
 
