@@ -108,9 +108,8 @@
                                         <td>
 
                                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                    th:attr="data-bs-target='#editModal'+ ${user.id}">Edit
-                                            </button>
-                                            <div class="modal fade" th:id="'editModal'+ ${user.id}" tabindex="-1">
+                                                    data-bs-target="#editModal">Edit</button>
+                                            <div class="modal fade" id="editModal" tabindex="-1">
                                                 <div class=" modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -119,43 +118,45 @@
                                                                     data-bs-dismiss="modal"
                                                                     aria-label="Close"></button>
                                                         </div>
-                                                        <form th:object="${user}" th:method="patch"
+                                                        <form th:method="PATCH" id="edit-user-form"
                                                               th:action="@{/admin/update}" class="modal-body d-flex flex-column  justify-content-center
-                                                                align-items-center">
-                                                            <label for="inputId" class="form-label fw-bold mb-0">ID
+                                                                align-items-center" th:object="${user}">
+                                                            <label for="editId" class="form-label fw-bold mb-0">ID
                                                             </label>
-                                                            <input type="text" class="form-control w-50" id="inputId"
-                                                                   th:value="${user.id}" name="id" readonly>
+                                                            <input type="text" class="form-control w-50" id="editId"
+                                                                    name="id" readonly/>
 
-                                                            <label for="inputFirstName"
+
+                                                            <label for="editFirstName"
                                                                    class="form-label fw-bold mb-0 mt-3">First Name
                                                             </label>
                                                             <input type="text" class="form-control w-50"
-                                                                   id="inputFirstName" th:value="${user.username}" name="username" >
+                                                                   id="editFirstName" name="username" >
 
-                                                            <label for="inputLastName"
+
+                                                            <label for="editLastName"
                                                                    class="form-label fw-bold  mt-3 mb-0">Last
                                                                 name</label>
                                                             <input type="text" class="form-control w-50"
-                                                                   id="inputLastName" th:value="${user.surname}" name="surname" >
+                                                                   id="editLastName"  name="surname" >
 
-                                                            <label for="inputAge" class="form-label fw-bold  mt-3 mb-0">Age</label>
-                                                            <input type="number" class="form-control w-50" id="inputAge"
-                                                                   th:value="${user.age}" name="age" >
+                                                            <label for="editAge" class="form-label fw-bold  mt-3 mb-0">Age</label>
+                                                            <input type="number" class="form-control w-50" id="editAge"
+                                                                   name="age" >
 
-                                                            <label for="inputEmail"
+                                                            <label for="editEmail"
                                                                    class="form-label fw-bold  mt-3 mb-0">Email</label>
                                                             <input type="email" class="form-control w-50"
-                                                                   id="inputEmail" th:value="${user.email}" name="email" >
+                                                                   id="editEmail" name="email" >
 
-                                                            <label for="inputPassword"
+                                                            <label for="editPassword"
                                                                    class="form-label fw-bold  mt-3 mb-0">Password</label>
                                                             <input type="password" class="form-control w-50"
-                                                                   id="inputPassword" name="password">
+                                                                   id="editPassword" name="password">
 
-                                                            <label for="inputRole"
+                                                            <label for="editRole"
                                                                    class="form-label fw-bold  mt-3 mb-0">Role</label>
-                                                            <select class="form-select w-50 " id="inputRole" size="2"
+                                                            <select class="form-select w-50 " id="editRole" size="2"
                                                                     aria-label="size 2 select example"
                                                                     name="updatedRole">
                                                                 <option th:each="role: ${allRoles}" th:text="${role.name == 'ROLE_USER' ? 'USER' : 'ADMIN'}"></option>
@@ -172,7 +173,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-danger" data-bs-toggle="modal"
@@ -245,7 +245,6 @@
                                 </table>
                             </div>
 
-
                         </div>
                         <div class="tab-pane fade" id="new-user">
                             <h4 class="bg-light text-dark p-3 mb-0 border  border-1 rounded">Add new user
@@ -297,6 +296,36 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
+<script>
+    const editModal = document.getElementById('editModal');
+    editModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const parent = button.parentElement.parentElement;
+
+        const rows = parent.querySelectorAll("td");
+        let id, firstName, lastName, age, email;
+        id = rows[0];
+        firstName = rows[1];
+        lastName = rows[2];
+        age = rows[3];
+        email = rows[4];
+
+
+        const modalUserId = editModal.querySelector('#editId');
+        const modalUserFirstName = editModal.querySelector('#editFirstName');
+        const modalUserLastName = editModal.querySelector('#editLastName');
+        const modalUserEmail = editModal.querySelector('#editEmail');
+        const modalUserAge = editModal.querySelector('#editAge');
+
+        modalUserId.value = id.innerText;
+        modalUserFirstName.value = firstName.innerText;
+        modalUserLastName.value = lastName.innerText;
+        modalUserEmail.value = email.innerText;
+        modalUserAge.value = age.innerText;
+
+
+    })
+</script>
 </body>
 
 </html>
