@@ -11,7 +11,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-public class UserDTO {
+public class UserDto {
 
     private Long id;
 
@@ -25,5 +25,5 @@ public class UserDTO {
 
     private String password;
 
-    private Set<RoleDTO> roles;
+    private Set<RoleDto> roles;
 }

@@ -2,8 +2,8 @@ package ru.kata.spring.boot_security.demo.util;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.kata.spring.boot_security.demo.dto.RoleDTO;
-import ru.kata.spring.boot_security.demo.dto.UserDTO;
+import ru.kata.spring.boot_security.demo.dto.RoleDto;
+import ru.kata.spring.boot_security.demo.dto.UserDto;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 
@@ -24,19 +24,19 @@ public class UserUtil {
         roleService = roleServiceBean;
     }
 
-    public static UserDTO mapUserToUserDTO(User user) {
-        UserDTO userDTO = new UserDTO();
+    public static UserDto mapUserToUserDTO(User user) {
+        UserDto userDTO = new UserDto();
         userDTO.setId(user.getId());
         userDTO.setUsername(user.getUsername());
         userDTO.setSurname(user.getSurname());
         userDTO.setAge(user.getAge());
         userDTO.setPassword(user.getPassword());
         userDTO.setEmail(user.getEmail());
-        userDTO.setRoles(user.getRoles().stream().map(x -> new RoleDTO(x.getName())).collect(Collectors.toSet()));
+        userDTO.setRoles(user.getRoles().stream().map(x -> new RoleDto(x.getName())).collect(Collectors.toSet()));
         return userDTO;
     }
 
-    public static User mapUserDTOToUser(UserDTO userDTO) {
+    public static User mapUserDTOToUser(UserDto userDTO) {
         User user = new User();
         user.setId(userDTO.getId());
         user.setUsername(userDTO.getUsername());

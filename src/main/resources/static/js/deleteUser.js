@@ -15,12 +15,30 @@ deleteModal.addEventListener('show.bs.modal', async function (event) {
         const modalUserLastName = this.querySelector('#deleteLastName');
         const modalUserAge = this.querySelector('#deleteAge');
         const modalUserEmail = this.querySelector('#deleteEmail');
+        const modalUserRoles = this.querySelector('#deleteRole');
 
         modalUserId.value = currentUser.id;
         modalUserUsername.value = currentUser.username;
         modalUserLastName.value = currentUser.surname;
         modalUserAge.value = currentUser.age;
         modalUserEmail.value = currentUser.email;
+        modalUserRoles.innerHTML = '';
+        const roles = currentUser.roles.map(role => {
+            if (role.name === 'ROLE_ADMIN') {
+                return 'ADMIN';
+            }
+            else {
+                return 'USER';
+            }
+        })
+
+        roles.forEach(role => {
+            const option = document.createElement('option');
+            option.textContent = role;
+
+            modalUserRoles.appendChild(option);
+        });
+
     } else {
         console.error('User not found');
     }

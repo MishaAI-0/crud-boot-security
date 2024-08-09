@@ -22,17 +22,12 @@
 <body>
 <nav class="navbar bg-dark text-white ">
     <div class="container-fluid">
-        <span class="navbar-text">
-            <span class="login fw-bold" th:text="${currentUser.email}"></span>
+        <span class="navbar-text" id="navbar-text">
+            <span class="login fw-bold" id="user-email"></span>
             <span>with roles: </span>
-            <span th:if="${not #lists.isEmpty(currentUser.roles.?[name == 'ROLE_ADMIN'])}" th:text="'ADMIN'"></span>
-            <span th:each="role, iterStat : ${currentUser.roles}">
-                <span
-                        th:if="${role.name != 'ROLE_ADMIN'}"
-                        th:text="${role.name == 'ROLE_USER' ? 'USER' : 'Other'}"></span>
-                <span th:if="${!iterStat.last}"> </span>
-            </span>
+            <span id="user-roles"></span>
         </span>
+
 
         <div class="navbar-nav ms-auto">
             <a href="/logout" class="text-decoration-none fw-bold text-secondary">logout</a>
@@ -45,13 +40,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-2 min-vh-100 ps-0 pe-0">
-                <nav class="sidebar nav flex-column">
-                    <a class="nav-link mt-4" th:if="${not #lists.isEmpty(currentUser.roles.?[name == 'ROLE_ADMIN'])}" th:text="'Admin'" th:href="'/admin'"
-                       th:classappend="${#httpServletRequest.requestURI == '/admin'} ? 'active'"></a>
-                    <a class="nav-link mt-4" th:each="role : ${currentUser.roles}"
-                       th:if="${role.name != 'ROLE_ADMIN'}"
-                       th:text="${role.name == 'ROLE_USER' ? 'User' : 'Other'}"
-                       th:href="${role.name == 'ROLE_USER' ? '/user' : '/error'}"></a>
+                <nav class="sidebar nav flex-column" id="sidebar-nav">
+                    <!-- Ссылки будут добавлены-->
                 </nav>
             </div>
             <div class="col-lg-10 bg-light">
@@ -133,7 +123,8 @@
                                                class="form-label fw-bold  mt-3 mb-0">Role</label>
                                         <select class="form-select w-50 " id="inputRole" size="2"
                                                 aria-label="size 2 select example">
-                                            <option th:each="role: ${allRoles}" th:text="${role.name == 'ROLE_USER' ? 'USER' : 'ADMIN'}"></option>
+                                            <option>ADMIN</option>
+                                            <option>USER</option>
                                         </select>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
@@ -147,7 +138,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal fade" th:id="'deleteModal'" tabindex="-1">
+                        <div class="modal fade" id="deleteModal" tabindex="-1">
                             <div class=" modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -185,8 +176,7 @@
                                                class="form-label fw-bold  mt-3 mb-0">Role</label>
                                         <select class="form-select w-50" id="deleteRole" size="2"
                                                 aria-label="size 2 select example" disabled>
-                                            <option th:each="role: ${allRoles}"
-                                                    th:text="${role.name}"></option>
+
                                         </select>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
@@ -230,7 +220,8 @@
                                 <label for="newUserInputRole" class="form-label fw-bold  mt-3 mb-0">Role</label>
                                 <select class="form-select w-25 " id="newUserInputRole" size="2"
                                         aria-label="size 2 select example">
-                                    <option th:each="role: ${allRoles}" th:text="${role.name == 'ROLE_USER' ? 'USER' : 'ADMIN'}"></option>
+                                    <option>ADMIN</option>
+                                    <option>USER</option>
                                 </select>
 
                                 <input type="button" class="btn btn-success mt-3" id="createUserButton" value="Add new user"/>
@@ -254,6 +245,7 @@
 <script src="js/editUser.js"></script>
 <script src="js/createUser.js"></script>
 <script src="js/deleteUser.js"></script>
+<script src="js/fillCurrentUserInfo.js"></script>
 </body>
 
 </html>

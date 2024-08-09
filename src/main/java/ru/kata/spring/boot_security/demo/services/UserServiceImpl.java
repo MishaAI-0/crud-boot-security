@@ -1,19 +1,16 @@
 package ru.kata.spring.boot_security.demo.services;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.dto.UserDTO;
+import ru.kata.spring.boot_security.demo.dto.UserDto;
 import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -63,7 +60,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
-    public User updateUser(Long id, UserDTO userDTO) {
+    public User updateUser(Long id, UserDto userDTO) {
         User existingUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
         if (!userDTO.getUsername().isEmpty()) {
             existingUser.setUsername(userDTO.getUsername());

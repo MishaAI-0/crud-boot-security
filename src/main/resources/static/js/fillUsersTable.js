@@ -39,31 +39,7 @@ async function fillUsersTable() {
             </tr>`
         );
     });
-    // const buttons = document.querySelectorAll('.btn.btn-danger');
-    //
-    // buttons.forEach((button) => {
-    //     button.addEventListener('click', async (event) => {
-    //         const button = event.target;
-    //         const parent = button.parentElement.parentElement;
-    //
-    //         const rows = parent.querySelector("td");
-    //         let new_id = rows.innerText;
-    //         console.log(`clicked ${new_id}`);
-    //
-    //         fetch(`http://localhost:8080/api/${new_id}`, {
-    //             method: 'DELETE',
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify({})
-    //         })
-    //             .then(response => {
-    //                 fillUsersTable();
-    //             })
-    //             .catch(error => {
-    //             });
-    //     })
-    // })
+
 }
 
 (async () => {

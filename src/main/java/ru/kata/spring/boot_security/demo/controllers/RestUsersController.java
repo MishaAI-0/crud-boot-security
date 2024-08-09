@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.kata.spring.boot_security.demo.dto.UserDTO;
+import ru.kata.spring.boot_security.demo.dto.UserDto;
+import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.util.UserUtil;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -33,7 +35,7 @@ public class RestUsersController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
         if (user != null) {
             return ResponseEntity.ok(UserUtil.mapUserToUserDTO(user));
@@ -42,15 +44,15 @@ public class RestUsersController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDTO) {
         userService.saveUser(UserUtil.mapUserDTOToUser(userDTO));
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 
     @PatchMapping
-    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDTO) {
         User updatedUser = userService.updateUser(userDTO.getId(), userDTO);
-        UserDTO updatedUserDTO = UserUtil.mapUserToUserDTO(updatedUser);
+        UserDto updatedUserDTO = UserUtil.mapUserToUserDTO(updatedUser);
         return ResponseEntity.ok(updatedUserDTO);
 
     }
@@ -61,5 +63,12 @@ public class RestUsersController {
         return ResponseEntity.noContent().build();
 
     }
+
+    @GetMapping("/current")
+    public ResponseEntity<User> getCurrentUser(Principal principal) {
+        return ResponseEntity.ok(userService.getUserByName(principal.getName()));
+    }
+
+
 
 }
