@@ -53,7 +53,7 @@ deleteUserSubmitButton.addEventListener('click', () => {
         },
         "body": JSON.stringify()}
 
-    fetch(`http://localhost:8080/api/${userId}`,options)
+    fetch(`http://localhost:8080/admin/api/${userId}`,options)
         .then(response => {
             const modal = bootstrap.Modal.getInstance(deleteModal);
             modal.hide()

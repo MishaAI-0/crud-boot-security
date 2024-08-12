@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('api/current')
+    fetch('user/api/current')
         .then(response => response.json())
         .then(user => {
             const userDataPlaceholder = document.getElementById("place_to_put_currentUser_data");

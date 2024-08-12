@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('api/current')
+    fetch('user/api/current')
         .then(response => response.json())
         .then(user => {
 

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kata.spring.boot_security.demo.dto.UserDto;
-import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.util.UserUtil;
@@ -21,9 +20,9 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("admin/api")
 @RequiredArgsConstructor
-public class RestUsersController {
+public class AdminController {
 
     private final UserService userService;
 
@@ -64,10 +63,7 @@ public class RestUsersController {
 
     }
 
-    @GetMapping("/current")
-    public ResponseEntity<User> getCurrentUser(Principal principal) {
-        return ResponseEntity.ok(userService.getUserByName(principal.getName()));
-    }
+
 
 
 
